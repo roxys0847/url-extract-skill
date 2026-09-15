@@ -44,8 +44,8 @@ program falls back to the highest bitrate rather than risk unreadable text.
 | Douyin | Public videos, short links, and complete share messages |
 | YouTube | Standard videos and Shorts |
 | X / Twitter | Posts containing public video |
-| Pornhub | Public adult-video pages |
-| MissAV | Public adult-video pages |
+| Pornhub | Public video pages |
+| MissAV | Public video pages |
 | 51吃瓜 | Public video posts on `51cg1.com` |
 | 18comic | Authorized individual `/photo/<numeric-id>` works exported to PDF |
 
