@@ -36,7 +36,7 @@ V1.0 不支持绕过登录、验证码、付费墙、年龄或地区限制、私
 
 1. 打开仓库的 [Releases](https://github.com/roxys0847/url-extract-skill/releases)。
 2. 选择 `URL-Extract for Windows V1.0`。
-3. 在 Assets 中下载 `url-extract for Windows.py`。
+3. 在 Assets 中下载 `url-extract-for-Windows.py`。
 
 也可以从仓库的 `dist` 目录取得同一文件。当前发行版只提供 Windows 版本。
 
@@ -74,7 +74,7 @@ V1.0 文件 SHA-256：
 在文件所在目录打开 PowerShell：
 
 ```powershell
-py -3.11 ".\url-extract for Windows.py"
+py -3.11 ".\url-extract-for-Windows.py"
 ```
 
 出现提示后，粘贴链接或完整分享文案并按回车。
@@ -84,7 +84,7 @@ py -3.11 ".\url-extract for Windows.py"
 ### 2. 直接传入链接或分享文案
 
 ```powershell
-py -3.11 ".\url-extract for Windows.py" "https://www.bilibili.com/video/BV..."
+py -3.11 ".\url-extract-for-Windows.py" "https://www.bilibili.com/video/BV..."
 ```
 
 链接前后即使包含中文标题、复制提示或 Markdown 包装，程序也会尝试提取其中第一个受支持的链接。
@@ -94,7 +94,7 @@ py -3.11 ".\url-extract for Windows.py" "https://www.bilibili.com/video/BV..."
 此命令只检查，不下载或安装：
 
 ```powershell
-py -3.11 ".\url-extract for Windows.py" --check-env
+py -3.11 ".\url-extract-for-Windows.py" --check-env
 ```
 
 - `ENV_CHECK_READY`：当前环境已准备好。
@@ -104,7 +104,7 @@ py -3.11 ".\url-extract for Windows.py" --check-env
 ### 4. 检查单文件完整性
 
 ```powershell
-py -3.11 ".\url-extract for Windows.py" --self-test
+py -3.11 ".\url-extract-for-Windows.py" --self-test
 ```
 
 显示 `SELF_TEST_OK` 表示内嵌视频与漫画核心通过本地校验。
@@ -163,7 +163,7 @@ Skill 内已附带相同的 Windows Python 文件。它会先把内容保存到�
 ```powershell
 $env:HTTP_PROXY = "http://127.0.0.1:7890"
 $env:HTTPS_PROXY = "http://127.0.0.1:7890"
-py -3.11 ".\url-extract for Windows.py"
+py -3.11 ".\url-extract-for-Windows.py"
 ```
 
 请把地址和端口替换为你自己的代理配置。不要把代理账号、密码、Cookie 或 Token 发到聊天或提交到仓库。
@@ -178,10 +178,10 @@ py --version
 
 ### `can't open file` / 找不到文件
 
-命令中的路径不正确。文件名包含空格，必须使用英文双引号包住完整路径：
+命令中的路径不正确。目录路径可能包含空格，建议使用英文双引号包住完整路径：
 
 ```powershell
-py -3.11 "D:\下载目录\url-extract for Windows.py" --check-env
+py -3.11 "D:\下载目录\url-extract-for-Windows.py" --check-env
 ```
 
 ### `unrecognized arguments: --check-env`

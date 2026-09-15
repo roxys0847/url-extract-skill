@@ -45,7 +45,7 @@ or media API changes.
 
 1. Open the repository's [Releases](https://github.com/roxys0847/url-extract-skill/releases).
 2. Select `URL-Extract for Windows V1.0`.
-3. Download `url-extract for Windows.py` from Assets.
+3. Download `url-extract-for-Windows.py` from Assets.
 
 The same file is available in the repository's `dist` directory. V1.0 is
 Windows-only.
@@ -88,7 +88,7 @@ profile rather than the Python installation directory.
 Open PowerShell in the file's directory:
 
 ```powershell
-py -3.11 ".\url-extract for Windows.py"
+py -3.11 ".\url-extract-for-Windows.py"
 ```
 
 Paste a URL or complete share message when prompted.
@@ -99,7 +99,7 @@ or later, replace `py -3.11` with `python` in the commands below.
 ### Pass input directly
 
 ```powershell
-py -3.11 ".\url-extract for Windows.py" "https://www.bilibili.com/video/BV..."
+py -3.11 ".\url-extract-for-Windows.py" "https://www.bilibili.com/video/BV..."
 ```
 
 The input may contain a title, Chinese copy text, Markdown wrappers, or escaped
@@ -110,7 +110,7 @@ URL characters. The first supported URL is extracted.
 This command is read-only and does not install or download anything:
 
 ```powershell
-py -3.11 ".\url-extract for Windows.py" --check-env
+py -3.11 ".\url-extract-for-Windows.py" --check-env
 ```
 
 - `ENV_CHECK_READY`: the environment is ready.
@@ -122,7 +122,7 @@ py -3.11 ".\url-extract for Windows.py" --check-env
 ### Verify the single file
 
 ```powershell
-py -3.11 ".\url-extract for Windows.py" --self-test
+py -3.11 ".\url-extract-for-Windows.py" --self-test
 ```
 
 `SELF_TEST_OK` confirms that both embedded cores passed local integrity checks.
@@ -188,7 +188,7 @@ Example temporary proxy configuration for the current PowerShell session:
 ```powershell
 $env:HTTP_PROXY = "http://127.0.0.1:7890"
 $env:HTTPS_PROXY = "http://127.0.0.1:7890"
-py -3.11 ".\url-extract for Windows.py"
+py -3.11 ".\url-extract-for-Windows.py"
 ```
 
 Replace the address and port with your own proxy settings. Never share proxy
@@ -205,11 +205,11 @@ py --version
 
 ### `can't open file`
 
-The path is wrong. Because the file name contains spaces, quote the complete
-path:
+The path is wrong. Because its directory path may contain spaces, quote the
+complete path:
 
 ```powershell
-py -3.11 "D:\Downloads\url-extract for Windows.py" --check-env
+py -3.11 "D:\Downloads\url-extract-for-Windows.py" --check-env
 ```
 
 ### `unrecognized arguments: --check-env`

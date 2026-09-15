@@ -25,7 +25,8 @@ standalone Python file parses and downloads that material.
 - License: none for V1.0.
 - Tag: `v1.0`.
 - Release title: `URL-Extract for Windows V1.0`.
-- Release asset: `url-extract for Windows.py` only.
+- Release asset: `url-extract-for-Windows.py` only. Hyphens avoid GitHub's
+  automatic normalization of spaces in uploaded asset names.
 
 ## Documentation requirements
 
@@ -40,4 +41,3 @@ boundaries.
 Before publishing, compile and self-test both tracked copies, compare their
 SHA-256 hashes, validate Skill metadata, scan for secrets and user-specific
 paths, and confirm the GitHub release exposes only the Windows Python asset.
-
