@@ -1,0 +1,16 @@
+__pycache__/
+*.py[cod]
+*.log
+.pytest_cache/
+.idea/
+.vscode/
+.venv/
+venv/
+.env
+.env.*
+cookies.txt
+*.part
+*.tmp
+downloads/
+output/
+

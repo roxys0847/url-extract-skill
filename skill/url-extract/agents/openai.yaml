@@ -1,0 +1,5 @@
+interface:
+  display_name: "URL-Extract"
+  short_description: "下载公开链接中的音画或漫画，供 AI 本地读取"
+  default_prompt: "Use $url-extract to download the supported public link, then inspect or transcribe the saved local media only as requested."
+
