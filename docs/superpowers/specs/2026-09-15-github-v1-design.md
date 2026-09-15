@@ -36,6 +36,12 @@ fixed-version dependencies, first-run restart behavior, output locations,
 environment checks, network/proxy troubleshooting, and public/authorized-use
 boundaries.
 
+The documentation distinguishes the quality policies: standalone Python uses
+`highest` by default, while Codex and Claude Code Skills invoke
+`--quality ai-readable` to keep the highest resolution and select the lowest
+bitrate within that resolution. Both Codex and Claude Code personal Skill
+installation paths are documented for Windows.
+
 ## Verification
 
 Before publishing, compile and self-test both tracked copies, compare their

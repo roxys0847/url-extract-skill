@@ -6,9 +6,15 @@ description: Use when a user provides a supported Bilibili, Douyin, YouTube, X/T
 # URL-Extract
 
 Use the bundled Windows Python file to turn a supported public link or complete
-share message into a local video or PDF. Once the file is local, use the AI
-client's available media-reading or transcription tools to examine its audio,
-frames, subtitles, and on-screen text.
+share message into a local video or PDF. For video, the Skill always invokes
+the `ai-readable` quality profile: keep the highest available resolution, then
+choose the lowest bitrate at that resolution so small on-screen text remains
+readable while the local file stays as small as practical. Prefer audio of at
+least 64 kbps. If reliable resolution metadata is unavailable, fall back to the
+highest bitrate rather than risk an unreadable picture.
+
+The standalone Python file defaults to the separate `highest` profile. Do not
+omit `--quality ai-readable` when the Skill downloads video.
 
 Do not use iTingnao for supported URL-Extract links.
 
@@ -33,17 +39,17 @@ $urlExtract = Join-Path $env:USERPROFILE ".codex\skills\url-extract\scripts\url-
 Before the first download, check the environment without changing it:
 
 ```powershell
-py -3.11 $urlExtract --check-env
+py $urlExtract --check-env
 ```
 
 Download from a URL or complete copied share message:
 
 ```powershell
-py -3.11 $urlExtract "<URL or complete share text>"
+py $urlExtract --quality ai-readable "<URL or complete share text>"
 ```
 
 If the Windows Python Launcher (`py`) is unavailable, use a verified Python
-3.11+ interpreter and replace `py -3.11` with `python`.
+3.11+ interpreter and replace `py` with `python`.
 
 If no argument is supplied, the program prompts for input. The first normal run
 installs missing fixed-version dependencies and may stop with a request to run
@@ -62,9 +68,10 @@ the command again. Run it a second time with the same input.
 - V1.0 has no metadata-only URL inspection mode; normal link processing
   downloads the media.
 
-The downloader selects the highest available bitrate. It accepts complete share
-messages containing captions, Chinese text, Markdown wrappers, and escaped URL
-characters.
+The bundled program accepts complete share messages containing captions,
+Chinese text, Markdown wrappers, and escaped URL characters. The Skill's
+`ai-readable` profile differs from the standalone program's default highest-
+bitrate profile.
 
 ## Supported sources
 
@@ -81,8 +88,8 @@ characters.
 Run the read-only checks first:
 
 ```powershell
-py -3.11 $urlExtract --check-env
-py -3.11 $urlExtract --self-test
+py $urlExtract --check-env
+py $urlExtract --self-test
 ```
 
 If dependency preparation fails or the program says

@@ -14,7 +14,8 @@ create a local transcript.
 
 - Finds the actual supported URL inside a link or complete share message.
 - Downloads video and audio and merges them into a playable local file.
-- Selects the highest publicly available bitrate by default.
+- Uses an AI-readable compact profile from the Skill, while the standalone
+  Python file defaults to the highest available bitrate.
 - Exports an authorized individual 18comic work as a highest-quality PDF.
 - Returns the final local path for AI frame reading, OCR, audio analysis, or
   local transcription.
@@ -23,6 +24,18 @@ create a local transcript.
 URL-Extract performs extraction and downloading. Understanding the downloaded
 audio and visuals requires an AI client that can read local media, run OCR, or
 transcribe audio.
+
+## Skill vs. standalone Python quality
+
+| Usage | Default policy | Purpose |
+|---|---|---|
+| URL-Extract Skill | `ai-readable` | Keep the highest available resolution, then select the lowest available bitrate at that resolution; prefer audio of at least 64 kbps. This reduces file size and AI processing cost while preserving small on-screen text. |
+| Standalone `url-extract-for-Windows.py` | `highest` | Select the highest available bitrate by default for high-quality local archiving. |
+
+“Lowest AI-readable bitrate” does not mean the lowest resolution. Resolution is
+kept at the highest available level, and bitrate is reduced only among streams
+at that resolution. If reliable resolution metadata is unavailable, the
+program falls back to the highest bitrate rather than risk unreadable text.
 
 ## Supported platforms
 
@@ -53,7 +66,7 @@ Windows-only.
 V1.0 SHA-256:
 
 ```text
-82B645776BE9D8F87431C29AEE47D95D9ADA4D95AB54D671089348D7B4763A71
+A9C9BA187C4AF877F61FF4A36DBD3F4E01C3A9B73771E3CF9ED8DD2B5472385A
 ```
 
 ## Requirements
@@ -88,18 +101,25 @@ profile rather than the Python installation directory.
 Open PowerShell in the file's directory:
 
 ```powershell
-py -3.11 ".\url-extract-for-Windows.py"
+py ".\url-extract-for-Windows.py"
 ```
 
 Paste a URL or complete share message when prompted.
 
+When run directly without a quality option, the file downloads the highest
+available bitrate. To manually use the same policy as the Skill:
+
+```powershell
+py ".\url-extract-for-Windows.py" --quality ai-readable "<URL or complete share message>"
+```
+
 If the `py` launcher is unavailable but `python --version` reports Python 3.11
-or later, replace `py -3.11` with `python` in the commands below.
+or later, replace `py` with `python` in the commands below.
 
 ### Pass input directly
 
 ```powershell
-py -3.11 ".\url-extract-for-Windows.py" "https://www.bilibili.com/video/BV..."
+py ".\url-extract-for-Windows.py" "https://www.bilibili.com/video/BV..."
 ```
 
 The input may contain a title, Chinese copy text, Markdown wrappers, or escaped
@@ -110,7 +130,7 @@ URL characters. The first supported URL is extracted.
 This command is read-only and does not install or download anything:
 
 ```powershell
-py -3.11 ".\url-extract-for-Windows.py" --check-env
+py ".\url-extract-for-Windows.py" --check-env
 ```
 
 - `ENV_CHECK_READY`: the environment is ready.
@@ -122,7 +142,7 @@ py -3.11 ".\url-extract-for-Windows.py" --check-env
 ### Verify the single file
 
 ```powershell
-py -3.11 ".\url-extract-for-Windows.py" --self-test
+py ".\url-extract-for-Windows.py" --self-test
 ```
 
 `SELF_TEST_OK` confirms that both embedded cores passed local integrity checks.
@@ -152,16 +172,52 @@ is selected.
 
 ## Install the Skill
 
-1. Download the repository ZIP or clone it. Git is not required when using ZIP.
-2. Copy the entire `skill\url-extract` directory to:
+Download the repository ZIP or clone it first. Git is not required when using
+ZIP. Run the commands below from the repository root.
+
+### Install for Codex
+
+Personal Skill directory:
 
 ```text
 C:\Users\<current-user>\.codex\skills\url-extract
 ```
 
-3. Restart Codex so it discovers the Skill.
-4. Send a supported link and ask the AI to download it, inspect frames, read
-   audio, or transcribe locally.
+PowerShell installation:
+
+```powershell
+$target = Join-Path $env:USERPROFILE ".codex\skills\url-extract"
+New-Item -ItemType Directory -Force $target | Out-Null
+Copy-Item -Path ".\skill\url-extract\*" -Destination $target -Recurse -Force
+```
+
+Restart Codex after installation.
+
+### Install for Claude Code
+
+This method is for Claude Code with local Skills support. It does not apply to
+the standard claude.ai web chat.
+
+Personal Skill directory:
+
+```text
+C:\Users\<current-user>\.claude\skills\url-extract
+```
+
+PowerShell installation:
+
+```powershell
+$target = Join-Path $env:USERPROFILE ".claude\skills\url-extract"
+New-Item -ItemType Directory -Force $target | Out-Null
+Copy-Item -Path ".\skill\url-extract\*" -Destination $target -Recurse -Force
+```
+
+Restart Claude Code or open a new session so it discovers the Skill.
+
+### Invocation example
+
+Send a supported link to Codex or Claude Code and ask it to download the media,
+inspect frames, read audio, or transcribe locally.
 
 Example:
 
@@ -169,8 +225,10 @@ Example:
 Use url-extract to download this link, read the visible text in the video, and transcribe its audio: <URL>
 ```
 
-The Skill includes the same Windows Python file. It downloads the content first
-and then lets the AI use available local-media tools.
+The Skill includes the same Windows Python file but always passes
+`--quality ai-readable`. It downloads the lowest-bitrate stream at the highest
+available resolution before the AI uses local-media tools. Running the Python
+file directly without that option still defaults to the highest bitrate.
 
 ## Troubleshooting
 
@@ -188,7 +246,7 @@ Example temporary proxy configuration for the current PowerShell session:
 ```powershell
 $env:HTTP_PROXY = "http://127.0.0.1:7890"
 $env:HTTPS_PROXY = "http://127.0.0.1:7890"
-py -3.11 ".\url-extract-for-Windows.py"
+py ".\url-extract-for-Windows.py"
 ```
 
 Replace the address and port with your own proxy settings. Never share proxy
@@ -209,7 +267,7 @@ The path is wrong. Because its directory path may contain spaces, quote the
 complete path:
 
 ```powershell
-py -3.11 "D:\Downloads\url-extract-for-Windows.py" --check-env
+py "D:\Downloads\url-extract-for-Windows.py" --check-env
 ```
 
 ### `unrecognized arguments: --check-env`

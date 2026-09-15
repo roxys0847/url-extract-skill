@@ -10,12 +10,21 @@ URL-Extract 是一个面向 AI 工作流的链接提取 Skill。它将受支持�
 
 - 从链接或完整分享文案中自动找出真正的网页地址。
 - 下载视频与音频，并合并为可直接播放的本地文件。
-- 默认选择平台公开提供的最高可用码率。
+- Skill 使用适合 AI 读取的精简码率；独立 Python 文件默认下载最高码率。
 - 将授权的 18comic 单部作品导出为最高画质 PDF。
 - 把最终本地路径交给 AI，用于读取画面中的小字、分析音频或执行本地转写。
 - 首次运行自动检查并安装缺失依赖。
 
 URL-Extract 本身负责“提取和下载”。AI 是否能够理解画面与声音，取决于调用它的 AI 客户端是否具备视频读取、OCR 或转写能力。
+
+## Skill 与 Python 文件的码率区别
+
+| 使用方式 | 默认策略 | 用途 |
+|---|---|---|
+| URL-Extract Skill | `ai-readable` | 保留平台可提供的最高分辨率，再选择该分辨率下的最低可用码率；音频优先至少 64 kbps。降低文件大小和 AI 读取成本，同时尽量保留画面小字。 |
+| 独立 `url-extract-for-Windows.py` | `highest` | 默认选择最高可用码率，适合保存原始高质量视频。 |
+
+“AI 可读最低码率”不是下载最低分辨率。画面分辨率优先保留最高，只降低同分辨率下的码率。如果平台没有提供可靠的分辨率信息，程序会回退到最高码率，避免得到无法识别小字的低清画面。
 
 ## 支持的平台
 
@@ -43,7 +52,7 @@ V1.0 不支持绕过登录、验证码、付费墙、年龄或地区限制、私
 V1.0 文件 SHA-256：
 
 ```text
-82B645776BE9D8F87431C29AEE47D95D9ADA4D95AB54D671089348D7B4763A71
+A9C9BA187C4AF877F61FF4A36DBD3F4E01C3A9B73771E3CF9ED8DD2B5472385A
 ```
 
 ## 系统要求
@@ -74,17 +83,23 @@ V1.0 文件 SHA-256：
 在文件所在目录打开 PowerShell：
 
 ```powershell
-py -3.11 ".\url-extract-for-Windows.py"
+py ".\url-extract-for-Windows.py"
 ```
 
 出现提示后，粘贴链接或完整分享文案并按回车。
 
-如果系统没有 `py` 命令，但 `python --version` 显示 3.11 或更高版本，可以把下文命令中的 `py -3.11` 替换为 `python`。
+独立运行不指定质量参数时，默认下载最高码率。也可以手动使用 Skill 相同的 AI-readable 策略：
+
+```powershell
+py ".\url-extract-for-Windows.py" --quality ai-readable "<链接或完整分享文案>"
+```
+
+如果系统没有 `py` 命令，但 `python --version` 显示 3.11 或更高版本，可以把下文命令中的 `py` 替换为 `python`。
 
 ### 2. 直接传入链接或分享文案
 
 ```powershell
-py -3.11 ".\url-extract-for-Windows.py" "https://www.bilibili.com/video/BV..."
+py ".\url-extract-for-Windows.py" "https://www.bilibili.com/video/BV..."
 ```
 
 链接前后即使包含中文标题、复制提示或 Markdown 包装，程序也会尝试提取其中第一个受支持的链接。
@@ -94,7 +109,7 @@ py -3.11 ".\url-extract-for-Windows.py" "https://www.bilibili.com/video/BV..."
 此命令只检查，不下载或安装：
 
 ```powershell
-py -3.11 ".\url-extract-for-Windows.py" --check-env
+py ".\url-extract-for-Windows.py" --check-env
 ```
 
 - `ENV_CHECK_READY`：当前环境已准备好。
@@ -104,7 +119,7 @@ py -3.11 ".\url-extract-for-Windows.py" --check-env
 ### 4. 检查单文件完整性
 
 ```powershell
-py -3.11 ".\url-extract-for-Windows.py" --self-test
+py ".\url-extract-for-Windows.py" --self-test
 ```
 
 显示 `SELF_TEST_OK` 表示内嵌视频与漫画核心通过本地校验。
@@ -130,15 +145,49 @@ C:\Users\<当前用户名>\Downloads\URL-Extract\漫画
 
 ## 安装 Skill
 
-1. 下载或克隆本仓库。使用 ZIP 下载时不需要 Git。
-2. 将 `skill\url-extract` 整个文件夹复制到：
+先下载或克隆本仓库。使用 ZIP 下载时不需要 Git。以下命令需要在仓库根目录执行。
+
+### 安装到 Codex
+
+个人 Skill 目录：
 
 ```text
 C:\Users\<当前用户名>\.codex\skills\url-extract
 ```
 
-3. 重新启动 Codex，使其重新发现 Skill。
-4. 向 AI 发送受支持平台的链接，并要求下载、检查画面、读取音频或本地转写。
+PowerShell 安装命令：
+
+```powershell
+$target = Join-Path $env:USERPROFILE ".codex\skills\url-extract"
+New-Item -ItemType Directory -Force $target | Out-Null
+Copy-Item -Path ".\skill\url-extract\*" -Destination $target -Recurse -Force
+```
+
+完成后重新启动 Codex。
+
+### 安装到 Claude Code
+
+此方式适用于支持本地 Skills 的 Claude Code，不适用于普通 claude.ai 网页聊天。
+
+个人 Skill 目录：
+
+```text
+C:\Users\<当前用户名>\.claude\skills\url-extract
+```
+
+PowerShell 安装命令：
+
+```powershell
+$target = Join-Path $env:USERPROFILE ".claude\skills\url-extract"
+New-Item -ItemType Directory -Force $target | Out-Null
+Copy-Item -Path ".\skill\url-extract\*" -Destination $target -Recurse -Force
+```
+
+完成后重新启动 Claude Code，或新建一个会话让它重新发现 Skill。
+
+### 调用示例
+
+向 Codex 或 Claude Code 发送受支持平台的链接，并要求下载、检查画面、读取音频或本地转写：
 
 示例：
 
@@ -146,7 +195,7 @@ C:\Users\<当前用户名>\.codex\skills\url-extract
 使用 url-extract 下载这个链接，然后读取视频中的画面文字并转写音频：<链接>
 ```
 
-Skill 内已附带相同的 Windows Python 文件。它会先把内容保存到本地，再由 AI 使用可用的媒体工具读取。
+Skill 内已附带相同的 Windows Python 文件，但会固定传入 `--quality ai-readable`。它先下载“最高分辨率内的最低码率”版本，再由 AI 使用可用的媒体工具读取。用户单独运行 `.py` 时不传该参数，仍然默认最高码率。
 
 ## 常见报错
 
@@ -163,7 +212,7 @@ Skill 内已附带相同的 Windows Python 文件。它会先把内容保存到�
 ```powershell
 $env:HTTP_PROXY = "http://127.0.0.1:7890"
 $env:HTTPS_PROXY = "http://127.0.0.1:7890"
-py -3.11 ".\url-extract-for-Windows.py"
+py ".\url-extract-for-Windows.py"
 ```
 
 请把地址和端口替换为你自己的代理配置。不要把代理账号、密码、Cookie 或 Token 发到聊天或提交到仓库。
@@ -181,7 +230,7 @@ py --version
 命令中的路径不正确。目录路径可能包含空格，建议使用英文双引号包住完整路径：
 
 ```powershell
-py -3.11 "D:\下载目录\url-extract-for-Windows.py" --check-env
+py "D:\下载目录\url-extract-for-Windows.py" --check-env
 ```
 
 ### `unrecognized arguments: --check-env`
