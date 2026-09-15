@@ -7,8 +7,8 @@ audio, or comic content from supported pages to local files so an AI client
 with media-reading capabilities can inspect frames, run OCR, analyze audio, or
 create a local transcript.
 
-> This repository is currently private. A GitHub account with repository access
-> must be signed in to view the code or download a Release.
+> This is a public repository. Its source is visible and the Windows build can
+> be downloaded directly from Releases.
 
 ## What it does
 
