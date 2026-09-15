@@ -16,7 +16,6 @@ create a local transcript.
 - Downloads video and audio and merges them into a playable local file.
 - Uses an AI-readable compact profile from the Skill, while the standalone
   Python file defaults to the highest available bitrate.
-- Exports an authorized individual 18comic work as a highest-quality PDF.
 - Returns the final local path for AI frame reading, OCR, audio analysis, or
   local transcription.
 - Checks and installs missing dependencies on the first run.
