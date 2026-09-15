@@ -33,8 +33,8 @@ URL-Extract 本身负责“提取和下载”。AI 是否能够理解画面与�
 | 抖音 / Douyin | 公开视频、短链接、完整分享文案 |
 | YouTube | 普通视频、Shorts |
 | X / Twitter | 包含公开视频的帖子 |
-| Pornhub | 公开成人内容视频页面 |
-| MissAV | 公开成人内容视频页面 |
+| Pornhub | 公开内容视频页面 |
+| MissAV | 公开内容视频页面 |
 | 51吃瓜 | `51cg1.com` 的公开视频帖子 |
 | 18comic | 已获授权的单部 `/photo/<数字ID>` 作品，输出 PDF |
 
