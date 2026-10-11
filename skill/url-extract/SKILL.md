@@ -16,6 +16,14 @@ highest bitrate rather than risk an unreadable picture.
 The standalone Python file defaults to the separate `highest` profile. Do not
 omit `--quality ai-readable` when the Skill downloads video.
 
+For Douyin, prefer a complete captured `media-video-*` and `media-audio-*`
+pair. If the public player serves one progressive MP4, accept it only when the
+same disposable browser confirms that the exact current source is loaded and
+has decoded audio. For MissAV, warm the homepage in the same anonymous
+disposable browser context before opening the public video page; retry an
+incomplete page instead of returning a missing HLS result. Never persist the
+temporary browser context or its cookies.
+
 Do not use iTingnao for supported URL-Extract links.
 
 ## Run
